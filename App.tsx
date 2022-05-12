@@ -9,11 +9,16 @@ import {TimerContext} from "./contexts/timer";
 export default function App() {
     const [teams, setTeams] = useState<Team[]>([])
     const [timer, setTimer] = useState<number>(3000)
+    let interval: NodeJS.Timer
 
     const incrementTimer = () => {
-        setInterval(() => {
+        interval = setInterval(() => {
             setTimer(previousTimer => previousTimer-1)
         }, 1000)
+    }
+
+    const clearTimer = () => {
+        clearInterval(interval)
     }
 
     useEffect(() => {
@@ -30,6 +35,7 @@ export default function App() {
                     timer,
                     setTimer: (timer: number) => setTimer(timer),
                     startTimer: incrementTimer,
+                    stopTimer: clearTimer
                 }}>
                     <RootStackNavigator/>
                 </TimerContext.Provider>

@@ -5,4 +5,5 @@ export const TimerContext = createContext<TimerContextType>({
     timer: 3000,
     setTimer: () => {},
     startTimer: () => {},
+    stopTimer: () => {}
 })

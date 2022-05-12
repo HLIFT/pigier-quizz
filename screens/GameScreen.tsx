@@ -14,13 +14,14 @@ import {convertSecondsToMinutes} from "../services/utils";
 const GameScreen = (props: NativeStackScreenProps<any>) => {
 
     const {teams, setTeams} = useContext<TeamsContextType>(TeamsContext)
-    const {timer, setTimer, startTimer} = useContext<TimerContextType>(TimerContext)
+    const {timer, setTimer, startTimer, stopTimer} = useContext<TimerContextType>(TimerContext)
 
     const [scoreboardVisible, setScoreboardVisible] = useState<boolean>(false)
 
     useEffect(() => {
         setTimer(3000)
         startTimer()
+        return () => stopTimer()
     }, [])
 
     const handleClickOnClose = () => {
@@ -33,7 +34,7 @@ const GameScreen = (props: NativeStackScreenProps<any>) => {
                     onPress: () => console.log("Annuler"),
                     style: "cancel"
                 },
-                { text: "Quitter", onPress: () => props.navigation.navigate("Landing") }
+                { text: "Quitter", onPress: () => props.navigation.reset({index: 0, routes: [{name: "Landing"}] }) }
             ]
         );
     }
@@ -102,7 +103,7 @@ const styles = StyleSheet.create({
 
     header: {
         height: '10%',
-        paddingHorizontal: 20,
+        paddingHorizontal: 30   ,
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center"

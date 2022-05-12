@@ -9,4 +9,5 @@ export type TimerContextType = {
     timer: number,
     setTimer: Function,
     startTimer: Function,
+    stopTimer: Function
 }

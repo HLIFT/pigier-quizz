@@ -17,26 +17,31 @@ const ScoreBoardModal = ({visible, onClose}: ScoreBoardModalProps) => {
     return (
         <Modal animationType="fade" visible={visible} transparent={true}>
             <View style={styles.modalContainer}>
-                <TouchableOpacity style={styles.close} onPress={onClose}>
-                    <Image style={styles.icon} source={require("../assets/icons/delete.png")} />
-                </TouchableOpacity>
-                <View style={styles.teamsContainer}>
-                    {teams
-                        .sort((a,b) => {
-                            return b.points - a.points
-                        })
-                        .map((team, index) => {
-                            return (
-                                <View key={`scoreboard-${team.id}`} style={styles.singleTeamContainer}>
-                                    <Text style={styles.team}>{index+1}</Text>
-                                    <Text style={styles.team}>{team.name}</Text>
-                                    <Text style={styles.team}>{team.points} points</Text>
-                                </View>
-                            )
-                        })
-                    }
-                </View>
+                <View style={styles.globalContainer}>
+                    <TouchableOpacity style={styles.close} onPress={onClose}>
+                        <Image style={styles.icon} source={require("../assets/icons/delete.png")} />
+                    </TouchableOpacity>
+                    <View style={styles.scoreboard}>
+                        <Text style={styles.scoreboardText}>CLASSEMENT</Text>
+                    </View>
+                    <View style={styles.teamsContainer}>
+                        {teams
+                            .sort((a,b) => {
+                                return b.points - a.points
+                            })
+                            .map((team, index) => {
+                                return (
+                                    <View key={`scoreboard-${team.id}`} style={styles.singleTeamContainer}>
+                                        <Text style={styles.team}>{index+1}</Text>
+                                        <Text style={styles.team}>{team.name}</Text>
+                                        <Text style={styles.team}>{team.points} points</Text>
+                                    </View>
+                                )
+                            })
+                        }
+                    </View>
 
+                </View>
             </View>
         </Modal>
     )
@@ -48,17 +53,42 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: 'rgba(0,0,0,0.75)',
+    },
+
+    globalContainer: {
+        backgroundColor: "#eef5ff",
+        width: '90%',
+        height: '90%',
+        borderRadius: 15
+    },
+
+    close: {
+        height: '10%',
+        justifyContent: "center",
+        alignItems: "flex-end",
         width: '100%',
-        height: '100%',
+        paddingHorizontal: 30
+    },
+
+    scoreboard: {
+        height: '40%',
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+
+    scoreboardText: {
+        color: Constants.colors.primary,
+        fontSize: 20,
+        fontWeight: "bold"
     },
 
     teamsContainer: {
         flexDirection: "column",
-        justifyContent: "center",
+        justifyContent: "flex-start",
         alignItems: "center",
         width: '100%',
-        height: '80%',
+        height: '50%',
     },
 
     singleTeamContainer: {
@@ -66,26 +96,19 @@ const styles = StyleSheet.create({
         justifyContent: "space-around",
         alignItems: "center",
         width: '100%',
-        marginVertical: 20
+        marginVertical: 15
     },
 
     team: {
-        color: Constants.colors.background,
+        color: Constants.colors.primary,
         fontSize: 18,
         fontWeight: "bold"
-    },
-
-    close: {
-        height: '20%',
-        justifyContent: "flex-end",
-        alignItems: "center",
-        width: '100%'
     },
 
     icon: {
         width: 20,
         height: 20,
-        tintColor: Constants.colors.background
+        tintColor: Constants.colors.primary
     },
 })
 
