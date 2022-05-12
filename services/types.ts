@@ -4,3 +4,9 @@ export type TeamsContextType = {
     teams: Team[],
     setTeams: Function
 }
+
+export type TimerContextType = {
+    timer: number,
+    setTimer: Function,
+    startTimer: Function,
+}

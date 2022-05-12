@@ -1,22 +1,41 @@
 import ScreenContainer from "../components/ScreenContainer";
-import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import {useContext, useState} from "react";
-import {TeamsContextType} from "../services/types";
+import {Alert, Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {useContext, useEffect, useState} from "react";
+import {TeamsContextType, TimerContextType} from "../services/types";
 import {TeamsContext} from "../contexts/teams";
 import TeamCard from "../components/TeamCard";
 import ActionCard from "../components/ActionCard";
 import Constants from "../services/constants";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import ScoreBoardModal from "../components/ScoreBoardModal";
+import {TimerContext} from "../contexts/timer";
+import {convertSecondsToMinutes} from "../services/utils";
 
 const GameScreen = (props: NativeStackScreenProps<any>) => {
 
     const {teams, setTeams} = useContext<TeamsContextType>(TeamsContext)
+    const {timer, setTimer, startTimer} = useContext<TimerContextType>(TimerContext)
 
     const [scoreboardVisible, setScoreboardVisible] = useState<boolean>(false)
 
+    useEffect(() => {
+        setTimer(3000)
+        startTimer()
+    }, [])
+
     const handleClickOnClose = () => {
-        props.navigation.goBack()
+        Alert.alert(
+            "Quitter la partie",
+            "Êtes-vous sûr de vouloir quitter la partie ?",
+            [
+                {
+                    text: "Annuler",
+                    onPress: () => console.log("Annuler"),
+                    style: "cancel"
+                },
+                { text: "Quitter", onPress: () => props.navigation.navigate("Landing") }
+            ]
+        );
     }
 
     return (
@@ -25,13 +44,13 @@ const GameScreen = (props: NativeStackScreenProps<any>) => {
             <View style={styles.globalContainer}>
                 <View style={styles.header}>
                     <TouchableOpacity onPress={() => setScoreboardVisible(true)}>
-                        <Image style={styles.icon} source={require("../assets/icons/trophee.png")} />
+                        <Image style={styles.icon} source={require("../assets/icons/trophee.png")}/>
                     </TouchableOpacity>
                     <View style={styles.timerContainer}>
-                        <Text style={styles.timer}>12:42</Text>
+                        <Text style={styles.timer}>{convertSecondsToMinutes(timer).minutes}:{convertSecondsToMinutes(timer).seconds}</Text>
                     </View>
                     <TouchableOpacity onPress={handleClickOnClose}>
-                        <Image style={styles.icon} source={require("../assets/icons/delete.png")} />
+                        <Image style={styles.icon} source={require("../assets/icons/delete.png")}/>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.teams}>
@@ -45,10 +64,10 @@ const GameScreen = (props: NativeStackScreenProps<any>) => {
                     })}
                 </View>
                 <View style={styles.actions}>
-                    <ActionCard image={require("../assets/icons/service-de-chambre.png")} />
-                    <ActionCard image={require("../assets/icons/case-a-cocher.png")} />
-                    <ActionCard image={require("../assets/icons/gemme.png")} />
-                    <ActionCard image={require("../assets/icons/star.png")} />
+                    <ActionCard image={require("../assets/icons/service-de-chambre.png")}/>
+                    <ActionCard image={require("../assets/icons/case-a-cocher.png")}/>
+                    <ActionCard image={require("../assets/icons/gemme.png")}/>
+                    <ActionCard image={require("../assets/icons/star.png")}/>
                 </View>
             </View>
         </ScreenContainer>
@@ -77,8 +96,8 @@ const styles = StyleSheet.create({
     },
 
     timer: {
-      color: Constants.colors.background,
-      fontSize: 18
+        color: Constants.colors.background,
+        fontSize: 18
     },
 
     header: {
