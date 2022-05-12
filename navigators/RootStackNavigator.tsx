@@ -2,6 +2,7 @@ import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import LandingScreen from "../screens/LandingScreen";
 import LobbyScreen from "../screens/LobbyScreen";
 import Constants from "../services/constants";
+import GameScreen from "../screens/GameScreen";
 
 const RootStack = createNativeStackNavigator()
 
@@ -23,6 +24,13 @@ const RootStackNavigator = () => {
                     headerTransparent: true,
                     headerTitle: '',
                     headerTintColor: Constants.colors.primary
+                }}
+            />
+            <RootStack.Screen
+                name="Game"
+                component={GameScreen}
+                options={{
+                    headerShown: false
                 }}
             />
         </RootStack.Navigator>

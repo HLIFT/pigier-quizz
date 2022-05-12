@@ -7,8 +7,9 @@ import {useContext, useState} from "react";
 import {TeamsContext} from "../contexts/teams";
 import {TeamsContextType} from "../services/types";
 import {Team} from "../models/Team";
+import {NativeStackScreenProps} from "@react-navigation/native-stack";
 
-const LobbyScreen = () => {
+const LobbyScreen = (props: NativeStackScreenProps<any>) => {
 
     const {teams, setTeams} = useContext<TeamsContextType>(TeamsContext)
 
@@ -18,17 +19,21 @@ const LobbyScreen = () => {
     const addTeam = () => {
         if (newTeamName !== '') {
 
-            const id = teams.length > 0 ? teams[teams.length-1].id+1 : 1
+            if(teams.find(team => team.name === newTeamName) === undefined) {
+                const id = teams.length > 0 ? teams[teams.length-1].id+1 : 1
 
-            const newTeam: Team = {
-                id,
-                name: newTeamName,
-                points: 0
+                const newTeam: Team = {
+                    id,
+                    name: newTeamName,
+                    points: 0
+                }
+
+                setTeams([...teams, newTeam])
+                setNewTeamName('')
+                setError(undefined)
+            } else {
+                setError("Ce nom d'équipe est déjà utilisé")
             }
-
-            setTeams([...teams, newTeam])
-            setNewTeamName('')
-            setError(undefined)
         } else {
             setError("Vous devez entrer un nom d'équipe pour ajouter une nouvelle équipe")
         }
@@ -40,7 +45,7 @@ const LobbyScreen = () => {
 
     const next = () => {
         if(teams.length >  1) {
-            console.log('ok')
+            props.navigation.navigate("Game")
         } else {
             setError("Vous devez ajouter au moins 2 équipes pour continuer")
         }
