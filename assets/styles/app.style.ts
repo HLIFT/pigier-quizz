@@ -24,5 +24,30 @@ export const appStyles = StyleSheet.create({
     primaryButtonText: {
         color: Constants.colors.background,
         fontSize: 20
-    }
+    },
+
+    secondaryButton: {
+        backgroundColor: Constants.colors.primary,
+        paddingVertical: 5,
+        paddingHorizontal: 10,
+        borderRadius: 10,
+        width: 100
+    },
+
+    secondaryButtonText: {
+        color: Constants.colors.background,
+        fontSize: 16,
+        textAlign: "center"
+    },
+
+    input: {
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderStyle: "solid",
+        borderWidth: 2,
+        borderColor: Constants.colors.primary,
+        borderRadius: 15,
+        width: '100%'
+    },
+
 })
