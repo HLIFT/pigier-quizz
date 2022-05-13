@@ -26,22 +26,7 @@ const GameScreen = (props: NativeStackScreenProps<any>) => {
     }, [])
 
     const goToQuestion = (type: ActionType) => {
-        switch (type) {
-            case ActionType.BELL:
-                props.navigation.navigate("Question")
-                break
-            case ActionType.CHECK:
-                props.navigation.navigate("Question")
-                break
-            case ActionType.GEM:
-                props.navigation.navigate("Question")
-                break
-            case ActionType.DICE:
-                props.navigation.navigate("Question")
-                break
-            default:
-                break
-        }
+        props.navigation.navigate("Question", {type})
     }
 
     const handleClickOnClose = () => {
