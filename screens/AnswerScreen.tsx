@@ -52,7 +52,7 @@ const AnswerScreen = (props: NativeStackScreenProps<any>) => {
         if (selectedTeam && points !== 0) {
             setTeams(teams.map(team => {
                 if(team.id === selectedTeam) {
-                    team.points += points
+                    team.points += type === ActionType.GEM ? points*2 : points
                 }
                 console.log(team)
                 return team
@@ -114,6 +114,9 @@ const AnswerScreen = (props: NativeStackScreenProps<any>) => {
                         </TouchableOpacity>
                     </View>
                     <View>
+                        {type === ActionType.GEM ? <Text style={styles.infoText}>Les points sont doublés !</Text> : null}
+                    </View>
+                    <View>
                         {error ? <Text style={styles.errorText}>{error}</Text> : null}
                     </View>
                 </View>
@@ -148,7 +151,7 @@ const styles = StyleSheet.create({
     },
 
     answerGlobalContainer: {
-        height: '40%',
+        height: '30%',
         width: '100%',
         justifyContent: "center",
         alignItems: "center",
@@ -169,7 +172,7 @@ const styles = StyleSheet.create({
     },
 
     teamContainer: {
-        height: '15%',
+        height: '20%',
         width: '90%',
         justifyContent: "center",
         alignItems: "center",
@@ -193,11 +196,12 @@ const styles = StyleSheet.create({
     },
 
     buttonsContainer: {
-        height: '20%',
+        height: '40%',
         width: '100%',
         flexDirection: "row",
         justifyContent: "space-evenly",
-        alignItems: "center"
+        alignItems: "center",
+        paddingBottom: 40
     },
 
     pointsUpdater: {
@@ -234,6 +238,14 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: 'crimson',
         fontSize: 12
+    },
+
+    infoText: {
+        fontSize: 18,
+        fontWeight: "bold",
+        textAlign: "center",
+        color: Constants.colors.primary,
+        marginVertical: 5
     }
 })
 
