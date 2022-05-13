@@ -2,31 +2,39 @@ import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import ScreenContainer from "../components/ScreenContainer";
 import Constants from "../services/constants";
 import {useContext, useEffect, useState} from "react";
-import {ActionType, ModalContextType} from "../services/types";
+import {ActionType, ModalContextType, Question, QuestionsContextType} from "../services/types";
 import {ModalContext} from "../contexts/modal";
 import ScoreBoardModal from "../components/ScoreBoardModal";
 import CircleButton from "../components/CircleButton";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {convertSecondsToMinutes} from "../services/utils";
+import {QuestionsContext} from "../contexts/questions";
 
 const QuestionScreen = (props: NativeStackScreenProps<any>) => {
 
     const {visible, setVisible} = useContext<ModalContextType>(ModalContext)
+    const {questions, cultureQuestions} = useContext<QuestionsContextType>(QuestionsContext)
     const [timer, setTimer] = useState<number>(20)
     const [timerVisible, setTimerVisible] = useState<boolean>(false)
     const [intervalTimer, setIntervalTimer] = useState<NodeJS.Timer>()
 
+    const [actualQuestion, setActualQuestion] = useState<Question>()
+    const type: ActionType = props.route.params?.type
+
     useEffect(() => {
-        const type: ActionType = props.route.params?.type
         console.log(type)
         switch (type) {
-            case ActionType.BELL:
-                setTimerVisible(true)
-                break
             case ActionType.CHECK:
-            case ActionType.GEM:
+                setTimerVisible(true)
+                setActualQuestion(questions[Math.floor(Math.random()*questions.length)])
+                break
             case ActionType.DICE:
+                setActualQuestion(cultureQuestions[Math.floor(Math.random()*cultureQuestions.length)])
+                break
+            case ActionType.BELL:
+            case ActionType.GEM:
             default:
+                setActualQuestion(questions[Math.floor(Math.random()*questions.length)])
                 break
         }
     }, [])
@@ -47,7 +55,7 @@ const QuestionScreen = (props: NativeStackScreenProps<any>) => {
 
     const next = () => {
         clearTimer()
-        props.navigation.navigate("Answer")
+        props.navigation.navigate("Answer", {question: actualQuestion, type})
     }
 
     const styles = StyleSheet.create({
@@ -144,12 +152,7 @@ const QuestionScreen = (props: NativeStackScreenProps<any>) => {
                 </View>
                 <View style={styles.questionGlobalContainer}>
                     <View style={styles.questionContainer}>
-                        <Text style={styles.questionText}>Lorem ipsum dolor sit amet.
-                            Sit sequi impedit eos saepe tempore non consectetur quod.
-                            Est commodi qui autem galisum cum dolores exercitationem vel enim voluptatum quo debitis unde?
-                            Qui saepe possimus ab aliquam quasi qui facere odio aut odit dolorum hic officiis repellat qui voluptatem ducimus quo explicabo commodi.
-                            Sed quia tenetur sit quos sint ut exercitationem rerum et mollitia inventore.
-                        </Text>
+                        <Text style={styles.questionText}>{actualQuestion?.question}</Text>
                     </View>
                 </View>
                 {timerVisible ?

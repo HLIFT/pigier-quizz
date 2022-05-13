@@ -1,5 +1,5 @@
 import {GestureResponderEvent, Image, Modal, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import {useContext, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {TeamsContextType} from "../services/types";
 import {TeamsContext} from "../contexts/teams";
 import Constants from "../services/constants";
@@ -15,7 +15,11 @@ const ScoreBoardModal = ({visible, onClose}: ScoreBoardModalProps) => {
 
     const { teams } = useContext<TeamsContextType>(TeamsContext)
 
-    const [sortedTeams, setSortedTeams] = useState<Team[]>(teams)
+    const sortedTeams: Team[] = [...teams]
+
+    useEffect(() => {
+        console.log('teams', teams)
+    }, [])
 
     return (
         <Modal animationType="fade" visible={visible} transparent={true}>

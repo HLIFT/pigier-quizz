@@ -2,7 +2,7 @@ import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import ScreenContainer from "../components/ScreenContainer";
 import Constants from "../services/constants";
 import {useContext, useEffect, useState} from "react";
-import {ModalContextType, TeamsContextType} from "../services/types";
+import {ActionType, ModalContextType, Question, QuestionsContextType, TeamsContextType} from "../services/types";
 import {ModalContext} from "../contexts/modal";
 import ScoreBoardModal from "../components/ScoreBoardModal";
 import CircleButton from "../components/CircleButton";
@@ -10,15 +10,20 @@ import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {Team} from "../models/Team";
 import {Picker} from "@react-native-picker/picker";
 import {TeamsContext} from "../contexts/teams";
+import {QuestionsContext} from "../contexts/questions";
 
 const AnswerScreen = (props: NativeStackScreenProps<any>) => {
 
     const {teams, setTeams} = useContext<TeamsContextType>(TeamsContext)
     const {visible, setVisible} = useContext<ModalContextType>(ModalContext)
+    const {questions, cultureQuestions, setQuestions, setCultureQuestions} = useContext<QuestionsContextType>(QuestionsContext)
 
     const [selectedTeam, setSelectedTeam] = useState<number|undefined>(undefined)
     const [points, setPoints] = useState<number>(0)
     const [error, setError] = useState<string|undefined>(undefined)
+
+    const actualQuestion = props.route.params?.question
+    const type = props.route.params?.type
 
     const incrementPoints = () => {
         setPoints(points+1)
@@ -28,14 +33,31 @@ const AnswerScreen = (props: NativeStackScreenProps<any>) => {
         if(points > 0) setPoints(points-1)
     }
 
+    const removeQuestionFromList = () => {
+        switch (type) {
+            case ActionType.BELL:
+            case ActionType.CHECK:
+            case ActionType.GEM:
+                setQuestions(questions.filter(question => question.id !== actualQuestion.id))
+                break
+            case ActionType.DICE:
+                setCultureQuestions(cultureQuestions.filter(question => question.id !== actualQuestion.id))
+                break
+            default:
+                break
+        }
+    }
+
     const goodResponse = () => {
         if (selectedTeam && points !== 0) {
             setTeams(teams.map(team => {
                 if(team.id === selectedTeam) {
                     team.points += points
                 }
+                console.log(team)
                 return team
             }))
+            removeQuestionFromList()
             props.navigation.navigate("Game")
         } else {
             setError("Vous devez choisir une équipe et lui attribuer des points")
@@ -43,6 +65,7 @@ const AnswerScreen = (props: NativeStackScreenProps<any>) => {
     }
 
     const badResponse = () => {
+        removeQuestionFromList()
         props.navigation.navigate("Game")
     }
 
@@ -57,12 +80,7 @@ const AnswerScreen = (props: NativeStackScreenProps<any>) => {
                 </View>
                 <View style={styles.answerGlobalContainer}>
                     <View style={styles.answerContainer}>
-                        <Text style={styles.answerText}>Lorem ipsum dolor sit amet.
-                            Sit sequi impedit eos saepe tempore non consectetur quod.
-                            Est commodi qui autem galisum cum dolores exercitationem vel enim voluptatum quo debitis unde?
-                            Qui saepe possimus ab aliquam quasi qui facere odio aut odit dolorum hic officiis repellat qui voluptatem ducimus quo explicabo commodi.
-                            Sed quia tenetur sit quos sint ut exercitationem rerum et mollitia inventore.
-                        </Text>
+                        <Text style={styles.answerText}>{actualQuestion?.answer}</Text>
                     </View>
                 </View>
                 <View style={styles.teamContainer}>

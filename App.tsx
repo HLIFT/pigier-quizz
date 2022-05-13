@@ -5,6 +5,9 @@ import {Team} from "./models/Team";
 import {TeamsContext} from "./contexts/teams";
 import {TimerContext} from "./contexts/timer";
 import {ModalContext} from "./contexts/modal";
+import {QuestionsContext} from "./contexts/questions";
+import {Question} from "./services/types";
+import {listOfCultureQuestions, listOfQuestions} from "./services/questions";
 
 
 export default function App() {
@@ -12,6 +15,8 @@ export default function App() {
     const [timer, setTimer] = useState<number>(3000)
     const [modalVisible, setModalVisible] = useState<boolean>(false)
     const [intervalTimer, setIntervalTimer] = useState<NodeJS.Timer>()
+    const [questions, setQuestions] = useState<Question[]>(listOfQuestions)
+    const [cultureQuestions, setCultureQuestions] = useState<Question[]>(listOfCultureQuestions)
 
     const incrementTimer = () => {
         setIntervalTimer(setInterval(() => {
@@ -24,15 +29,15 @@ export default function App() {
     }
 
     useEffect(() => {
-        console.log('timer', timer)
         if(timer <= 0 || teams.find(team => team.points >= 200) !== undefined) {
             clearTimer()
         }
     }, [timer, teams])
 
     useEffect(() => {
-
-    })
+        if(questions.length <= 0) setQuestions(listOfQuestions)
+        if(cultureQuestions.length <= 0) setCultureQuestions(listOfCultureQuestions)
+    }, [questions, cultureQuestions])
 
     return (
         <NavigationContainer>
@@ -50,7 +55,14 @@ export default function App() {
                         visible: modalVisible,
                         setVisible: (visible: boolean) => setModalVisible(visible)
                     }}>
-                        <RootStackNavigator/>
+                        <QuestionsContext.Provider value={{
+                            questions,
+                            cultureQuestions,
+                            setQuestions,
+                            setCultureQuestions
+                        }}>
+                            <RootStackNavigator/>
+                        </QuestionsContext.Provider>
                     </ModalContext.Provider>
                 </TimerContext.Provider>
             </TeamsContext.Provider>

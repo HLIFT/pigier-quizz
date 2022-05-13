@@ -17,9 +17,22 @@ export type ModalContextType = {
     setVisible: Function,
 }
 
+export type QuestionsContextType = {
+    questions: Question[],
+    cultureQuestions: Question[],
+    setQuestions: Function,
+    setCultureQuestions: Function
+}
+
 export enum ActionType {
     BELL,
     CHECK,
     GEM,
     DICE
+}
+
+export type Question = {
+    id: number,
+    question: string,
+    answer: string
 }
