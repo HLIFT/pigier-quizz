@@ -3,6 +3,8 @@ import LandingScreen from "../screens/LandingScreen";
 import LobbyScreen from "../screens/LobbyScreen";
 import Constants from "../services/constants";
 import GameScreen from "../screens/GameScreen";
+import QuestionScreen from "../screens/QuestionScreen";
+import AnswerScreen from "../screens/AnswerScreen";
 
 const RootStack = createNativeStackNavigator()
 
@@ -29,6 +31,20 @@ const RootStackNavigator = () => {
             <RootStack.Screen
                 name="Game"
                 component={GameScreen}
+                options={{
+                    headerShown: false
+                }}
+            />
+            <RootStack.Screen
+                name="Question"
+                component={QuestionScreen}
+                options={{
+                    headerShown: false
+                }}
+            />
+            <RootStack.Screen
+                name="Answer"
+                component={AnswerScreen}
                 options={{
                     headerShown: false
                 }}

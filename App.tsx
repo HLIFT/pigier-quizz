@@ -4,11 +4,13 @@ import {useEffect, useState} from "react";
 import {Team} from "./models/Team";
 import {TeamsContext} from "./contexts/teams";
 import {TimerContext} from "./contexts/timer";
+import {ModalContext} from "./contexts/modal";
 
 
 export default function App() {
     const [teams, setTeams] = useState<Team[]>([])
     const [timer, setTimer] = useState<number>(3000)
+    const [modalVisible, setModalVisible] = useState<boolean>(false)
     let interval: NodeJS.Timer
 
     const incrementTimer = () => {
@@ -37,7 +39,12 @@ export default function App() {
                     startTimer: incrementTimer,
                     stopTimer: clearTimer
                 }}>
-                    <RootStackNavigator/>
+                    <ModalContext.Provider value={{
+                        visible: modalVisible,
+                        setVisible: (visible: boolean) => setModalVisible(visible)
+                    }}>
+                        <RootStackNavigator/>
+                    </ModalContext.Provider>
                 </TimerContext.Provider>
             </TeamsContext.Provider>
 

@@ -27,10 +27,11 @@ const TeamCard = (props: TeamCardProps) => {
 const styles = StyleSheet.create({
     container: {
         flexDirection: "row",
-        justifyContent: "space-between",
+        justifyContent: "space-evenly",
+        alignItems: "center",
         backgroundColor: Constants.colors.primary,
         paddingVertical: 10,
-        paddingHorizontal: 30,
+        paddingHorizontal: 15,
         width: '100%',
         marginVertical: 15,
         borderRadius: 15
@@ -44,8 +45,8 @@ const styles = StyleSheet.create({
 
     deleteIcon: {
         tintColor: Constants.colors.background,
-        width: 20,
-        height: 20
+        width: 15,
+        height: 15
     }
 })
 

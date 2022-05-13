@@ -1,9 +1,10 @@
 import {GestureResponderEvent, Image, Modal, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import {useContext} from "react";
+import {useContext, useState} from "react";
 import {TeamsContextType} from "../services/types";
 import {TeamsContext} from "../contexts/teams";
 import Constants from "../services/constants";
 import * as events from "events";
+import {Team} from "../models/Team";
 
 interface ScoreBoardModalProps {
     visible: boolean,
@@ -13,6 +14,8 @@ interface ScoreBoardModalProps {
 const ScoreBoardModal = ({visible, onClose}: ScoreBoardModalProps) => {
 
     const { teams } = useContext<TeamsContextType>(TeamsContext)
+
+    const [sortedTeams, setSortedTeams] = useState<Team[]>(teams)
 
     return (
         <Modal animationType="fade" visible={visible} transparent={true}>
@@ -25,7 +28,7 @@ const ScoreBoardModal = ({visible, onClose}: ScoreBoardModalProps) => {
                         <Text style={styles.scoreboardText}>CLASSEMENT</Text>
                     </View>
                     <View style={styles.teamsContainer}>
-                        {teams
+                        {sortedTeams
                             .sort((a,b) => {
                                 return b.points - a.points
                             })
@@ -71,7 +74,7 @@ const styles = StyleSheet.create({
     },
 
     scoreboard: {
-        height: '40%',
+        height: '20%',
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
@@ -88,7 +91,7 @@ const styles = StyleSheet.create({
         justifyContent: "flex-start",
         alignItems: "center",
         width: '100%',
-        height: '50%',
+        height: '70%',
     },
 
     singleTeamContainer: {

@@ -11,3 +11,15 @@ export type TimerContextType = {
     startTimer: Function,
     stopTimer: Function
 }
+
+export type ModalContextType = {
+    visible: boolean,
+    setVisible: Function,
+}
+
+export enum ActionType {
+    BELL,
+    CHECK,
+    GEM,
+    DICE
+}

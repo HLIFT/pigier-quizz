@@ -8,6 +8,7 @@ import {TeamsContext} from "../contexts/teams";
 import {TeamsContextType} from "../services/types";
 import {Team} from "../models/Team";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
+import Constants from "../services/constants";
 
 const LobbyScreen = (props: NativeStackScreenProps<any>) => {
 
@@ -17,26 +18,31 @@ const LobbyScreen = (props: NativeStackScreenProps<any>) => {
     const [error, setError] = useState<string|undefined>(undefined)
 
     const addTeam = () => {
-        if (newTeamName !== '') {
+        if(teams.length < 8) {
+            if (newTeamName !== '') {
 
-            if(teams.find(team => team.name === newTeamName) === undefined) {
-                const id = teams.length > 0 ? teams[teams.length-1].id+1 : 1
+                if(teams.find(team => team.name === newTeamName) === undefined) {
+                    const id = teams.length > 0 ? teams[teams.length-1].id+1 : 1
 
-                const newTeam: Team = {
-                    id,
-                    name: newTeamName,
-                    points: 0
+                    const newTeam: Team = {
+                        id,
+                        name: newTeamName,
+                        points: 0
+                    }
+
+                    setTeams([...teams, newTeam])
+                    setNewTeamName('')
+                    setError(undefined)
+                } else {
+                    setError("Ce nom d'équipe est déjà utilisé")
                 }
-
-                setTeams([...teams, newTeam])
-                setNewTeamName('')
-                setError(undefined)
             } else {
-                setError("Ce nom d'équipe est déjà utilisé")
+                setError("Vous devez entrer un nom d'équipe pour ajouter une nouvelle équipe")
             }
         } else {
-            setError("Vous devez entrer un nom d'équipe pour ajouter une nouvelle équipe")
+            setError("Vous pouvez ajouter un maximum de 8 équipes")
         }
+
     }
 
     const removeTeam = (id: number) => {
@@ -54,7 +60,7 @@ const LobbyScreen = (props: NativeStackScreenProps<any>) => {
     return (
         <ScreenContainer>
             <View style={styles.container}>
-                <TextInput style={appStyles.input} placeholder="Nom de l'équipe" onChangeText={setNewTeamName} value={newTeamName}/>
+                <TextInput style={styles.input} placeholder="Nom de l'équipe" onChangeText={setNewTeamName} value={newTeamName} maxLength={12}/>
                 {error ? <Text style={styles.error}>{error}</Text> : null}
                 <View style={styles.buttonsContainer}>
                     <SecondaryButton text="Ajouter" onPress={addTeam}/>
@@ -62,15 +68,21 @@ const LobbyScreen = (props: NativeStackScreenProps<any>) => {
                 </View>
                 <View
                     style={{
-                        borderBottomColor: "rgba(0,0,0,0.32)",
+                        borderBottomColor: "#0063F766",
                         borderBottomWidth: 1,
-                        width: "100%"
+                        width: "80%"
                     }}
                 />
                 <View style={styles.teamsContainer}>
                     {teams.map(team => {
                         return (
-                            <TeamCard key={`team-${team.id}`} name={team.name} onDelete={() => removeTeam(team.id)} />
+                            <View style={styles.team}>
+                                <TeamCard
+                                    key={`team-${team.id}`}
+                                    name={team.name}
+                                    onDelete={() => removeTeam(team.id)}
+                                />
+                            </View>
                         )
                     })}
                 </View>
@@ -81,28 +93,46 @@ const LobbyScreen = (props: NativeStackScreenProps<any>) => {
 
 const styles = StyleSheet.create({
     container: {
-        width: '80%',
+        width: '100%',
         justifyContent: "center",
         alignItems: "center"
     },
     buttonsContainer: {
         flexDirection: "row",
-        width: '80%',
-        justifyContent: "space-between",
+        width: '50%',
+        justifyContent: "space-evenly",
         marginVertical: 30
     },
     teamsContainer: {
-        padding: 20,
         width: '100%',
+        height: '60%',
         justifyContent: "center",
-        alignItems: "center"
+        alignContent: "center",
+        flexWrap: "wrap",
     },
+
+    team: {
+        width: '40%',
+        marginHorizontal: 20
+    },
+
     error: {
         color: "crimson",
         fontSize: 12,
         textAlign: "center",
-        marginTop: 10
-    }
+        marginTop: 10,
+        width: '80%'
+    },
+
+    input: {
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderStyle: "solid",
+        borderWidth: 2,
+        borderColor: Constants.colors.primary,
+        borderRadius: 15,
+        width: '80%'
+    },
 })
 
 export default LobbyScreen
