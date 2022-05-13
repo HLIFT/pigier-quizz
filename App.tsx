@@ -11,21 +11,28 @@ export default function App() {
     const [teams, setTeams] = useState<Team[]>([])
     const [timer, setTimer] = useState<number>(3000)
     const [modalVisible, setModalVisible] = useState<boolean>(false)
-    let interval: NodeJS.Timer
+    const [intervalTimer, setIntervalTimer] = useState<NodeJS.Timer>()
 
     const incrementTimer = () => {
-        interval = setInterval(() => {
+        setIntervalTimer(setInterval(() => {
             setTimer(previousTimer => previousTimer-1)
-        }, 1000)
+        }, 1000))
     }
 
     const clearTimer = () => {
-        clearInterval(interval)
+        clearInterval(intervalTimer)
     }
 
     useEffect(() => {
         console.log('timer', timer)
-    }, [timer])
+        if(timer <= 0 || teams.find(team => team.points >= 200) !== undefined) {
+            clearTimer()
+        }
+    }, [timer, teams])
+
+    useEffect(() => {
+
+    })
 
     return (
         <NavigationContainer>

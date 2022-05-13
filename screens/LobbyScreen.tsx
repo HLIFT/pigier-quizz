@@ -76,9 +76,8 @@ const LobbyScreen = (props: NativeStackScreenProps<any>) => {
                 <View style={styles.teamsContainer}>
                     {teams.map(team => {
                         return (
-                            <View style={styles.team}>
+                            <View key={`team-${team.id}`} style={styles.team}>
                                 <TeamCard
-                                    key={`team-${team.id}`}
                                     name={team.name}
                                     onDelete={() => removeTeam(team.id)}
                                 />

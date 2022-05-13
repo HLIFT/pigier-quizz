@@ -17,7 +17,7 @@ const GameScreen = (props: NativeStackScreenProps<any>) => {
     const {timer, setTimer, startTimer, stopTimer} = useContext<TimerContextType>(TimerContext)
     const {visible, setVisible} = useContext<ModalContextType>(ModalContext)
 
-    const [lastGameDisabled, setLastGameDisabled] = useState<boolean>(true)
+    const endOfGame: boolean = teams.find(team => team.points >= 200) !== undefined || timer <= 0
 
     useEffect(() => {
         setTimer(3000)
@@ -49,6 +49,80 @@ const GameScreen = (props: NativeStackScreenProps<any>) => {
         props.navigation.reset({index: 0, routes: [{name: "Landing"}] })
     }
 
+    const styles = StyleSheet.create({
+        globalContainer: {
+            height: '100%',
+            width: '100%',
+            flexDirection: "column",
+            justifyContent: "space-between"
+        },
+
+        icon: {
+            width: 20,
+            height: 20,
+            tintColor: Constants.colors.primary
+        },
+
+        timerContainer: {
+            backgroundColor: endOfGame ? 'crimson' : Constants.colors.primary,
+            paddingVertical: 10,
+            paddingHorizontal: 20,
+            borderRadius: 15
+        },
+
+        timer: {
+            color: Constants.colors.background,
+            fontSize: 18
+        },
+
+        header: {
+            height: '10%',
+            paddingHorizontal: 30   ,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center"
+        },
+
+        teams: {
+            height: '40%',
+            justifyContent: "center",
+            alignContent: "center",
+            flexDirection: "column",
+            flexWrap: "wrap",
+        },
+
+        actions: {
+            height: '50%',
+            flexDirection: "row",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            alignItems: "center",
+            alignContent: "center"
+        },
+
+        team: {
+            flexDirection: "row",
+            flexWrap: "wrap",
+            justifyContent: "space-around",
+            alignItems: "center",
+            width: '40%',
+            paddingVertical: 10,
+            paddingHorizontal: 20,
+            borderRadius: 15,
+            backgroundColor: Constants.colors.primary,
+            margin: 15
+        },
+
+        teamText: {
+            color: Constants.colors.background,
+            fontSize: 16,
+        },
+
+        teamName: {
+            fontWeight: "bold"
+        }
+    })
+
     return (
         <ScreenContainer>
             <ScoreBoardModal visible={visible} onClose={() => setVisible(false)}/>
@@ -75,89 +149,15 @@ const GameScreen = (props: NativeStackScreenProps<any>) => {
                     })}
                 </View>
                 <View style={styles.actions}>
-                    <ActionCard image={require("../assets/icons/service-de-chambre.png")} onPress={() => goToQuestion(ActionType.BELL)}/>
-                    <ActionCard image={require("../assets/icons/case-a-cocher.png")} onPress={() => goToQuestion(ActionType.CHECK)}/>
-                    <ActionCard image={require("../assets/icons/gemme.png")} onPress={() => goToQuestion(ActionType.GEM)}/>
-                    <ActionCard image={require("../assets/icons/de.png")} onPress={() => goToQuestion(ActionType.DICE)}/>
-                    <ActionCard image={require("../assets/icons/star.png")} disabled={lastGameDisabled} onPress={() => goToQuestion(ActionType.BELL)}/>
+                    <ActionCard image={require("../assets/icons/service-de-chambre.png")} disabled={endOfGame} onPress={() => goToQuestion(ActionType.BELL)}/>
+                    <ActionCard image={require("../assets/icons/case-a-cocher.png")} disabled={endOfGame} onPress={() => goToQuestion(ActionType.CHECK)}/>
+                    <ActionCard image={require("../assets/icons/gemme.png")} disabled={endOfGame} onPress={() => goToQuestion(ActionType.GEM)}/>
+                    <ActionCard image={require("../assets/icons/de.png")} disabled={endOfGame} onPress={() => goToQuestion(ActionType.DICE)}/>
+                    <ActionCard image={require("../assets/icons/star.png")} disabled={!endOfGame} onPress={() => goToQuestion(ActionType.BELL)}/>
                 </View>
             </View>
         </ScreenContainer>
     )
 }
-
-const styles = StyleSheet.create({
-    globalContainer: {
-        height: '100%',
-        width: '100%',
-        flexDirection: "column",
-        justifyContent: "space-between"
-    },
-
-    icon: {
-        width: 20,
-        height: 20,
-        tintColor: Constants.colors.primary
-    },
-
-    timerContainer: {
-        backgroundColor: Constants.colors.primary,
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        borderRadius: 15
-    },
-
-    timer: {
-        color: Constants.colors.background,
-        fontSize: 18
-    },
-
-    header: {
-        height: '10%',
-        paddingHorizontal: 30   ,
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center"
-    },
-
-    teams: {
-        height: '40%',
-        justifyContent: "center",
-        alignContent: "center",
-        flexDirection: "column",
-        flexWrap: "wrap",
-    },
-
-    actions: {
-        height: '50%',
-        flexDirection: "row",
-        flexWrap: "wrap",
-        justifyContent: "center",
-        alignItems: "center",
-        alignContent: "center"
-    },
-
-    team: {
-        flexDirection: "row",
-        flexWrap: "wrap",
-        justifyContent: "space-around",
-        alignItems: "center",
-        width: '40%',
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        borderRadius: 15,
-        backgroundColor: Constants.colors.primary,
-        margin: 15
-    },
-
-    teamText: {
-        color: Constants.colors.background,
-        fontSize: 16,
-    },
-
-    teamName: {
-        fontWeight: "bold"
-    }
-})
 
 export default GameScreen
