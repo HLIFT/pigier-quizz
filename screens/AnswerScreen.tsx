@@ -11,6 +11,7 @@ import {Team} from "../models/Team";
 import {Picker} from "@react-native-picker/picker";
 import {TeamsContext} from "../contexts/teams";
 import {QuestionsContext} from "../contexts/questions";
+import RNPickerSelect from 'react-native-picker-select';
 
 const AnswerScreen = (props: NativeStackScreenProps<any>) => {
 
@@ -54,7 +55,6 @@ const AnswerScreen = (props: NativeStackScreenProps<any>) => {
                 if(team.id === selectedTeam) {
                     team.points += type === ActionType.GEM ? points*2 : points
                 }
-                console.log(team)
                 return team
             }))
             removeQuestionFromList()
@@ -84,7 +84,7 @@ const AnswerScreen = (props: NativeStackScreenProps<any>) => {
                     </View>
                 </View>
                 <View style={styles.teamContainer}>
-                    <Picker
+                    {/*<Picker
                         mode="dialog"
                         style={styles.picker}
                         selectedValue={selectedTeam}
@@ -99,7 +99,28 @@ const AnswerScreen = (props: NativeStackScreenProps<any>) => {
                                 <Picker.Item key={`team-${team.id}`} label={team.name} value={team.id} />
                             )
                         })}
-                    </Picker>
+                    </Picker>*/}
+                    <View style={{
+                        width: '50%'
+                    }}>
+                        <RNPickerSelect
+                            value={selectedTeam}
+                            placeholder={
+                                {
+                                    label: "Sélectionnez une équipe...",
+                                    color: Constants.colors.primary,
+                                }
+                            }
+                            onValueChange={(itemValue, itemIndex) => setSelectedTeam(itemValue)}
+                            items={[...teams].map(team => {
+                                return {
+                                    label: team.name,
+                                    value: team.id,
+                                    color: Constants.colors.primary
+                                }
+                            })}
+                        />
+                    </View>
                 </View>
                 <View style={styles.pointsGlobalContainer}>
                     <View style={styles.pointsContainer}>

@@ -17,10 +17,6 @@ const ScoreBoardModal = ({visible, onClose}: ScoreBoardModalProps) => {
 
     const sortedTeams: Team[] = [...teams]
 
-    useEffect(() => {
-        console.log('teams', teams)
-    }, [])
-
     return (
         <Modal animationType="fade" visible={visible} transparent={true}>
             <View style={styles.modalContainer}>

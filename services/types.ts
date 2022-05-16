@@ -28,7 +28,8 @@ export enum ActionType {
     BELL,
     CHECK,
     GEM,
-    DICE
+    DICE,
+    FINAL
 }
 
 export type Question = {

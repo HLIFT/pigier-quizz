@@ -1,6 +1,6 @@
 import ScreenContainer from "../components/ScreenContainer";
 import {Alert, Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import {useContext, useEffect, useState} from "react";
+import {useContext, useEffect} from "react";
 import {ActionType, ModalContextType, TeamsContextType, TimerContextType} from "../services/types";
 import {TeamsContext} from "../contexts/teams";
 import ActionCard from "../components/ActionCard";
@@ -26,7 +26,11 @@ const GameScreen = (props: NativeStackScreenProps<any>) => {
     }, [])
 
     const goToQuestion = (type: ActionType) => {
-        props.navigation.navigate("Question", {type})
+        if(type === ActionType.FINAL) {
+            props.navigation.navigate("FinalQuestions")
+        } else {
+            props.navigation.navigate("Question", {type})
+        }
     }
 
     const handleClickOnClose = () => {
@@ -36,7 +40,7 @@ const GameScreen = (props: NativeStackScreenProps<any>) => {
             [
                 {
                     text: "Annuler",
-                    onPress: () => console.log("Annuler"),
+                    onPress: () => {},
                     style: "cancel"
                 },
                 { text: "Quitter", onPress: quitGame }
@@ -153,7 +157,7 @@ const GameScreen = (props: NativeStackScreenProps<any>) => {
                     <ActionCard image={require("../assets/icons/case-a-cocher.png")} disabled={endOfGame} onPress={() => goToQuestion(ActionType.CHECK)}/>
                     <ActionCard image={require("../assets/icons/gemme.png")} disabled={endOfGame} onPress={() => goToQuestion(ActionType.GEM)}/>
                     <ActionCard image={require("../assets/icons/de.png")} disabled={endOfGame} onPress={() => goToQuestion(ActionType.DICE)}/>
-                    <ActionCard image={require("../assets/icons/star.png")} disabled={!endOfGame} onPress={() => goToQuestion(ActionType.BELL)}/>
+                    <ActionCard image={require("../assets/icons/star.png")} disabled={!endOfGame} onPress={() => goToQuestion(ActionType.FINAL)}/>
                 </View>
             </View>
         </ScreenContainer>

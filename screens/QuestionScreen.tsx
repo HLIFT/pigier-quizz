@@ -22,7 +22,6 @@ const QuestionScreen = (props: NativeStackScreenProps<any>) => {
     const type: ActionType = props.route.params?.type
 
     useEffect(() => {
-        console.log(type)
         switch (type) {
             case ActionType.CHECK:
                 setTimerVisible(true)
